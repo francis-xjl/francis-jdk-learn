@@ -506,6 +506,8 @@ public class LinkedHashMap<K,V>
      *           from the map; <tt>false</tt> if it should be retained.
      */
     protected boolean removeEldestEntry(Map.Entry<K,V> eldest) {
+        // 若返回true，则在添加entry的时候，移除最旧的entry
+        // 该方法为LinkedHashMap提供了一个扩展，具体实现可以见ExpiringCache
         return false;
     }
 
