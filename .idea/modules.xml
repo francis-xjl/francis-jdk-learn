@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/jdk_8_learn.iml" filepath="$PROJECT_DIR$/.idea/jdk_8_learn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/francis-jdk-learning.iml" filepath="$PROJECT_DIR$/francis-jdk-learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdk-11-source/jdk-11-source.iml" filepath="$PROJECT_DIR$/jdk-11-source/jdk-11-source.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdk-collections/jdk-collections.iml" filepath="$PROJECT_DIR$/jdk-collections/jdk-collections.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdk-concurrency-utilities/jdk-concurrency-utilities.iml" filepath="$PROJECT_DIR$/jdk-concurrency-utilities/jdk-concurrency-utilities.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdk-io/jdk-io.iml" filepath="$PROJECT_DIR$/jdk-io/jdk-io.iml" />
     </modules>
   </component>
 </project>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jdk-11-source" />
+        <module name="jdk-collections" />
+        <module name="jdk-concurrency-utilities" />
+        <module name="jdk-io" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="francis-jdk-learning" target="1.6" />
+      <module name="jdk-11-source" target="1.6" />
+      <module name="jdk-collections" target="1.6" />
+      <module name="jdk-concurrency-utilities" target="1.6" />
+      <module name="jdk-io" target="1.6" />
+      <module name="jdk-multithread" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

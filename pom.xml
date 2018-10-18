@@ -21,7 +21,7 @@
     <description>
         Java学习笔记，主要是对一些基础特性和编程细节进行总结整理。包含示例源码，涉及反射，代理，集合，IO，多线程等。
     </description>
-    <url>https://github.com/brianway/java-learning/</url>
+    <url>https://github.com/francis-xjl/francis-jdk-learn</url>
 
     <developers>
         <developer>
@@ -39,11 +39,10 @@
     </licenses>
 
     <modules>
-        <module>jdk-rt-source</module>
-        <module>jdk-multithread</module>
-        <module>jdk-base</module>
-        <module>jdk-container</module>
+        <module>jdk-11-source</module>
+        <module>jdk-collections</module>
         <module>jdk-io</module>
+        <module>jdk-concurrency-utilities</module>
     </modules>
 
     <dependencyManagement>
