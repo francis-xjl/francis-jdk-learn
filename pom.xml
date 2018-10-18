@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.brianway.learning.java</groupId>
+    <artifactId>jdk-10-learning</artifactId>
+    <packaging>pom</packaging>
+    <name>JDK 10 Learning</name>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.10</maven.compiler.source>
+        <maven.compiler.target>1.10</maven.compiler.target>
+        <junit.version>4.11</junit.version>
+    </properties>
+
+    <description>
+        Java学习笔记，主要是对一些基础特性和编程细节进行总结整理。包含示例源码，涉及反射，代理，集合，IO，多线程等。
+    </description>
+    <url>https://github.com/brianway/java-learning/</url>
+
+    <developers>
+        <developer>
+            <id>francis.xjl</id>
+            <name>Xia Jinlong</name>
+            <email>francis.xjl@qq.com</email>
+        </developer>
+    </developers>
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <modules>
+        <module>jdk-rt-source</module>
+        <module>jdk-multithread</module>
+        <module>jdk-base</module>
+        <module>jdk-container</module>
+        <module>jdk-io</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
