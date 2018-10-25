@@ -15,11 +15,11 @@ import java.util.List;
  **/
 public class VarHandleTest {
 
-    static final VarHandle VAR_HANDLE_FIELD;
+    static final VarHandle VH_DEMO_FIELD;
 
     static {
         try {
-            VAR_HANDLE_FIELD = MethodHandles.lookup().in(VarHandleDemo.class)
+            VH_DEMO_FIELD = MethodHandles.lookup().in(VarHandleDemo.class)
                     .findVarHandle(VarHandleDemo.class, "field", int.class);
         } catch (Exception e) {
             throw new Error(e);
@@ -29,7 +29,7 @@ public class VarHandleTest {
     @Test
     public void testCompareAndSet() {
         VarHandleDemo demo = new VarHandleDemo(10);
-        boolean r = VAR_HANDLE_FIELD.compareAndSet(demo, 10, 1);
+        boolean r = VH_DEMO_FIELD.compareAndSet(demo, 10, 1);
         assert demo.getField() == 1;
         assert r;
     }
@@ -37,7 +37,7 @@ public class VarHandleTest {
     @Test
     public void testGetAndSet() {
         VarHandleDemo demo = new VarHandleDemo(10);
-        int r = (int)VAR_HANDLE_FIELD.getAndSet(demo, 5);
+        int r = (int) VH_DEMO_FIELD.getAndSet(demo, 5);
         assert r == 10;
         assert demo.getField() == 5;
     }
@@ -45,7 +45,7 @@ public class VarHandleTest {
     @Test
     public void testGetVolatile() {
         VarHandleDemo demo = new VarHandleDemo(10);
-        int result = (int)VAR_HANDLE_FIELD.getVolatile(demo);
+        int result = (int) VH_DEMO_FIELD.getVolatile(demo);
         assert result == 10;
     }
 
@@ -125,7 +125,7 @@ public class VarHandleTest {
         @Override
         public void run() {
             int result = demo.getField() + addValue;
-            VAR_HANDLE_FIELD.set(demo, result);
+            VH_DEMO_FIELD.set(demo, result);
             System.out.println(demo.getField());
         }
     }
@@ -142,7 +142,7 @@ public class VarHandleTest {
 
         @Override
         public void run() {
-            VAR_HANDLE_FIELD.getAndAdd(demo, addValue);
+            VH_DEMO_FIELD.getAndAdd(demo, addValue);
             System.out.println(demo.getField());
         }
     }
