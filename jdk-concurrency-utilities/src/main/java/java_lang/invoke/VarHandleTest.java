@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @program: francis-jdk-learn
@@ -40,9 +42,62 @@ public class VarHandleTest {
         assert demo.getField() == 5;
     }
 
+    @Test
+    public void testGetVolatile() {
+        VarHandleDemo demo = new VarHandleDemo(10);
+        int result = (int)VAR_HANDLE_FIELD.getVolatile(demo);
+        assert result == 10;
+    }
+
+    @Test
+    public void testGetAndAdd() throws InterruptedException {
+        int threadCount = 10000;
+        VarHandleDemo demo = new VarHandleDemo(0);
+
+        List<VarHandleAddThread> varHandleAddThreads = new ArrayList<>();
+        for(int i = 0; i < threadCount; i++) {
+            varHandleAddThreads.add(new VarHandleAddThread(demo, 1));
+            varHandleAddThreads.add(new VarHandleAddThread(demo, -1));
+        }
+
+        for(VarHandleAddThread thread : varHandleAddThreads) {
+            thread.start();
+        }
+
+        for(VarHandleAddThread thread : varHandleAddThreads) {
+            thread.join();
+        }
+
+        assert demo.getField() == 0;
+    }
+
+    @Test
+    public void testSet() throws InterruptedException {
+        int threadCount = 10000;
+        VarHandleDemo demo = new VarHandleDemo(0);
+
+        List<VarHandleSetThread> threads = new ArrayList<>();
+        for(int i = 0; i < threadCount; i++) {
+            threads.add(new VarHandleSetThread(demo, 1));
+            threads.add(new VarHandleSetThread(demo, -1));
+        }
+
+        for(VarHandleSetThread thread : threads) {
+            thread.start();
+        }
+
+        for(VarHandleSetThread thread : threads) {
+            thread.join();
+        }
+
+        // access mode将覆盖在变量声明时指定的任何内存排序效果。
+        // set方法对应的就是非volatile定义，是没有可见性保证的
+        // https://www.jianshu.com/p/e231042a52dd
+        assert demo.getField() != 0;
+    }
 
     class VarHandleDemo {
-        private int field;
+        private volatile int field;
 
         public VarHandleDemo(int field) {
             this.field = field;
@@ -57,4 +112,38 @@ public class VarHandleTest {
         }
     }
 
+    class VarHandleSetThread extends Thread {
+
+        private VarHandleDemo demo;
+        private int addValue;
+
+        public VarHandleSetThread(VarHandleDemo demo, int addValue) {
+            this.demo = demo;
+            this.addValue = addValue;
+        }
+
+        @Override
+        public void run() {
+            int result = demo.getField() + addValue;
+            VAR_HANDLE_FIELD.set(demo, result);
+            System.out.println(demo.getField());
+        }
+    }
+
+    class VarHandleAddThread extends Thread {
+
+        private VarHandleDemo demo;
+        private int addValue;
+
+        public VarHandleAddThread(VarHandleDemo demo, int addValue) {
+            this.demo = demo;
+            this.addValue = addValue;
+        }
+
+        @Override
+        public void run() {
+            VAR_HANDLE_FIELD.getAndAdd(demo, addValue);
+            System.out.println(demo.getField());
+        }
+    }
 }
