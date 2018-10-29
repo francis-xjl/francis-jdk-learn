@@ -81,6 +81,7 @@ import jdk.internal.misc.Unsafe;
  * in a way that prevents all access.  This class is fully
  * interoperable with {@code Hashtable} in programs that rely on its
  * thread safety but not on its synchronization details.
+ * 获取操作并不需要锁（怎么做到的）
  *
  * <p>Retrieval operations (including {@code get}) generally do not
  * block, so may overlap with update operations (including {@code put}
@@ -102,6 +103,9 @@ import jdk.internal.misc.Unsafe;
  * Otherwise the results of these methods reflect transient states
  * that may be adequate for monitoring or estimation purposes, but not
  * for program control.
+ * 对于指定的key，更新操作happens-before获取操作。对于putALL/clear这样的聚合操作，并发获取只能部分操作。
+ * 迭代器设计为单线程中使用，不能被多个线程同时执行。
+ * size/isEmpty/containsValue在高并发场景下并不可靠，仅可以用于监控或评估，不要用来做程序控制。
  *
  * <p>The table is dynamically expanded when there are too many
  * collisions (i.e., keys that have distinct hash codes but fall into
@@ -125,6 +129,7 @@ import jdk.internal.misc.Unsafe;
  * hash table. To ameliorate impact, when keys are {@link Comparable},
  * this class may use comparison order among keys to help break ties.
  *
+ *
  * <p>A {@link Set} projection of a ConcurrentHashMap may be created
  * (using {@link #newKeySet()} or {@link #newKeySet(int)}), or viewed
  * (using {@link #keySet(Object)} when only keys are of interest, and the
@@ -144,6 +149,7 @@ import jdk.internal.misc.Unsafe;
  *
  * <p>Like {@link Hashtable} but unlike {@link HashMap}, this class
  * does <em>not</em> allow {@code null} to be used as a key or value.
+ * key/value不允许为空
  *
  * <p>ConcurrentHashMaps support a set of sequential and parallel bulk
  * operations that, unlike most {@link Stream} methods, are designed
@@ -933,16 +939,20 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
      */
     public V get(Object key) {
         Node<K,V>[] tab; Node<K,V> e, p; int n, eh; K ek;
-        int h = spread(key.hashCode());
+        int h = spread(key.hashCode());// hash值
         if ((tab = table) != null && (n = tab.length) > 0 &&
-            (e = tabAt(tab, (n - 1) & h)) != null) {
-            if ((eh = e.hash) == h) {
-                if ((ek = e.key) == key || (ek != null && key.equals(ek)))
+            (e = tabAt(tab, (n - 1) & h)) != null) { // volatile read element at (n - 1) & h, 定位到数组头结点
+
+            if ((eh = e.hash) == h) { // 比较hash值
+                if ((ek = e.key) == key || (ek != null && key.equals(ek))) // key == or key equals
                     return e.val;
             }
-            else if (eh < 0)
+            else if (eh < 0) // hash为负，表示数组下面并非链表，使用find操作进行查询
                 return (p = e.find(h, key)) != null ? p.val : null;
-            while ((e = e.next) != null) {
+
+            // TODO 看起来eh < 0的分支可以与下面的逻辑合并，为什么没合并？
+
+            while ((e = e.next) != null) { // 其它情况皆为链表，遍历链表查询
                 if (e.hash == h &&
                     ((ek = e.key) == key || (ek != null && key.equals(ek))))
                     return e.val;
